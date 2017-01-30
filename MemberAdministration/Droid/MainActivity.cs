@@ -7,6 +7,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Prism.Unity;
+using Microsoft.Practices.Unity;
+using Microsoft.Extensions.Logging;
 
 namespace MemberAdministration.Droid
 {
@@ -22,7 +25,15 @@ namespace MemberAdministration.Droid
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 
-			LoadApplication(new App());
+			LoadApplication(new App(new AndroidInitializer()));
+		}
+	}
+
+	public class AndroidInitializer : IPlatformInitializer
+	{
+		public void RegisterTypes(IUnityContainer container)
+		{
+			container.Resolve<ILoggerFactory>().AddConsole();
 		}
 	}
 }

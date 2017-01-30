@@ -2,6 +2,7 @@
 using Microsoft.Practices.Unity;
 using Xamarin.Forms;
 using Microsoft.Extensions.Logging;
+using MemberAdministration.Views;
 
 namespace MemberAdministration
 {
@@ -31,7 +32,8 @@ namespace MemberAdministration
 			Container.RegisterTypeForNavigation<MainPage>();
 
 			Container.RegisterType<IAccountService, AccountService>(new ContainerControlledLifetimeManager());
-		}
+            Container.RegisterTypeForNavigation<RestApiSettingsPage>();
+        }
 
 		//protected override void OnStart()
 		//{

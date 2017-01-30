@@ -1,17 +1,19 @@
-﻿using System;
+﻿using MemberAdministration.Views;
+using Prism.Commands;
+using Prism.Navigation;
+using System;
 using System.Linq;
+using System.Windows.Input;
 using Xamarin.Auth;
 
 namespace MemberAdministration
 {
 	public class MainPageViewModel
 	{
-		private readonly IAccountService _accountService;
+        public ICommand SettingsCommand { get; private set; }
 
-		public MainPageViewModel(IAccountService accountService)
-		{
-			_accountService = accountService;
-		}
+        private readonly IAccountService _accountService;
+        private readonly INavigationService _navigationService;
 
 		public bool IsRestApiAccountSet
 		{
@@ -24,6 +26,21 @@ namespace MemberAdministration
 			}
 		}
 
+		public MainPageViewModel(IAccountService accountService, INavigationService navigationService)
+		{
+			_accountService = accountService;
+            _navigationService = navigationService;
 
+            SettingsCommand = new DelegateCommand<object>(this.OnSettings, this.CanSettings);
+		}
+
+        private void OnSettings(object state)
+        {
+            _navigationService.NavigateAsync(nameof(RestApiSettingsPage));
+        }
+        private bool CanSettings(object state)
+        {
+            return true;
+        }
 	}
 }

@@ -30,8 +30,12 @@ namespace MemberAdministration
 			Container.RegisterInstance(logger);
 
 			Container.RegisterTypeForNavigation<MainPage>();
+			Container.RegisterTypeForNavigation<StartPage>();
 
 			Container.RegisterType<IAccountService, AccountService>(new ContainerControlledLifetimeManager());
+			Container.RegisterType<IAccountService, AccountService>(new ContainerControlledLifetimeManager());
+
+
             Container.RegisterTypeForNavigation<RestApiSettingsPage>();
         }
 

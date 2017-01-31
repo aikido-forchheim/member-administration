@@ -11,6 +11,7 @@ namespace MemberAdministration
 	public class MainPageViewModel
 	{
         public ICommand SettingsCommand { get; private set; }
+		public ICommand StartCommand { get; private set; }
 
         private readonly IAccountService _accountService;
         private readonly INavigationService _navigationService;
@@ -32,9 +33,10 @@ namespace MemberAdministration
             _navigationService = navigationService;
 
             SettingsCommand = new DelegateCommand<object>(this.OnSettings, this.CanSettings);
+			StartCommand = new DelegateCommand<object>(this.OnStart, this.CanStart);
 		}
 
-        private void OnSettings(object state)
+		private void OnSettings(object state)
         {
             _navigationService.NavigateAsync(nameof(RestApiSettingsPage));
         }
@@ -42,5 +44,15 @@ namespace MemberAdministration
         {
             return true;
         }
+
+		void OnStart(object obj)
+		{
+			_navigationService.NavigateAsync(nameof(StartPage));
+		}
+
+		bool CanStart(object arg)
+		{
+			return IsRestApiAccountSet;
+		}
 	}
 }

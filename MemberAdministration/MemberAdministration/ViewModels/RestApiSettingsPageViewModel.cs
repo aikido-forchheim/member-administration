@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Xamarin.Auth;
 
 namespace MemberAdministration.ViewModels
 {
@@ -13,12 +14,16 @@ namespace MemberAdministration.ViewModels
         private readonly ILogger _logger;
         private readonly IAccountService _accountService;
 
-        public string ApiUrl { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
+		public RestApiAccount RestApiAccount
+		{
+			get
+			{
+				return _accountService.RestApiAccount;
+			}
+			set
+			{
+			}
+		}
 
         private string _message;
         public string Message
@@ -42,7 +47,7 @@ namespace MemberAdministration.ViewModels
         {
             try
             {
-                _accountService.StoreRestApiAccount(ApiUrl, UserName, Password);
+				_accountService.StoreRestApiAccount(_accountService.RestApiAccount.ApiUrl, _accountService.RestApiAccount.UserName, _accountService.RestApiAccount.Password);
 
                 Message = "Account-Informationen erfolgreich gespeichert...";
             }

@@ -12,6 +12,23 @@ namespace MemberAdministration
 		public AccountService(ILogger logger)
 		{
 			_logger = logger;
+
+			_account = AccountStore.Create().FindAccountsForService(App.AppId)?.FirstOrDefault();
+
+			_restApiAccount = new RestApiAccount() { ApiUrl = _account?.Properties["ApiUrl"], Password = _account?.Properties["Password"], UserName = _account.Username };
+		}
+
+		Account _account;
+		RestApiAccount _restApiAccount;
+		public RestApiAccount RestApiAccount
+		{
+			get
+			{
+				return _restApiAccount;
+			}
+			set
+			{
+			}
 		}
 
 		public bool IsRestApiAccountSet
@@ -44,6 +61,13 @@ namespace MemberAdministration
 				};
 				account.Properties.Add("Password", password);
 				account.Properties.Add("ApiUrl", apiUrl);
+
+				var accounts = AccountStore.Create().FindAccountsForService(App.AppId).ToList();
+				foreach (var a in accounts)
+				{
+					AccountStore.Create().Delete(a, App.AppId);
+				}
+
 				AccountStore.Create().Save(account, App.AppId);
 			}
 		}

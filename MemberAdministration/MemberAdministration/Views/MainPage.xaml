@@ -2,10 +2,13 @@
 <ContentPage xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms" prism:ViewModelLocator.AutowireViewModel="True" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MemberAdministration.MainPage">
 	<ContentPage.Content>
 		<StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+
+		<Button Text="Weiter" IsEnabled="{Binding IsRestApiAccountSet}" Command="{Binding StartCommand}"></Button>
+			
 			<Label Text="RestAPI Login verfügbar:"></Label>
 			<Switch IsToggled="{Binding IsRestApiAccountSet}" IsEnabled="false"></Switch>
 
-      <Button Text="Einstellungen" Command="{Binding SettingsCommand}"></Button>
+      		<Button Text="Einstellungen" Command="{Binding SettingsCommand}"></Button>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

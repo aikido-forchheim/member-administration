@@ -1,23 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace MemberAdministration
 {
 	public class SettingsProxy : ISettingsProxy
 	{
-		public SettingsProxy()
+		private readonly ILogger _logger;
+		private readonly IPhpCrudApiService _phpCrudApiService;
+
+
+		public SettingsProxy(ILogger logger, IPhpCrudApiService phpCrudApiService)
 		{
+			_logger = logger;
+			_phpCrudApiService = phpCrudApiService;
 		}
 
-		public Task<Setting> GetSetting(string key)
+		public async Task<Setting> GetSettingAsync(string key)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<List<Setting>> GetSettings()
+		public async Task<List<Setting>> GetSettingsAsync()
 		{
-			throw new NotImplementedException();
+			string uri = $"Settings";
+			var tableResult = await _phpCrudApiService.GetDataAsync(uri);
+			var result = JsonConvert.DeserializeObject(tableResult);
+
+
+			return new List<Setting>();
 		}
 	}
 }

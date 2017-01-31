@@ -6,8 +6,8 @@ namespace MemberAdministration
 {
 	public interface ISettingsProxy
 	{
-		Task<Setting> GetSetting(string key);
+		Task<Setting> GetSettingAsync(string key);
 
-		Task<List<Setting>> GetSettings();
+		Task<List<Setting>> GetSettingsAsync();
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace MemberAdministration
 		private readonly ILogger _logger;
 		private readonly IPhpCrudApiService _phpCrudApiService;
 
+		List<Setting> _settings = null;
 
 		public SettingsProxy(ILogger logger, IPhpCrudApiService phpCrudApiService)
 		{
@@ -20,17 +22,22 @@ namespace MemberAdministration
 
 		public async Task<Setting> GetSettingAsync(string key)
 		{
-			throw new NotImplementedException();
+			if (_settings == null) await GetSettingsAsync();
+
+			var setting = (from s in _settings where s.Key == key select s).SingleOrDefault();
+
+			return setting;
 		}
 
 		public async Task<List<Setting>> GetSettingsAsync()
 		{
+			if (_settings != null) return _settings;
+
 			string uri = $"Settings";
 			var tableResult = await _phpCrudApiService.GetDataAsync(uri);
-			var result = JsonConvert.DeserializeObject(tableResult);
+			_settings = _phpCrudApiService.GetList<Setting>(tableResult);
 
-
-			return new List<Setting>();
+			return _settings;
 		}
 	}
 }

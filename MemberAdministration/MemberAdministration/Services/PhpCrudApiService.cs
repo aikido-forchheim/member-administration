@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace MemberAdministration
 {
-	public class PhpCrudApiService
+	public class PhpCrudApiService : IPhpCrudApiService
 	{
 		private readonly IAccountService _accountService;
 		private readonly ILogger _logger;
@@ -35,9 +39,37 @@ namespace MemberAdministration
 			return await GetStringAsync(httpWebRequest);
 		}
 
+		public List<T> GetList<T>(string tableResultJson)
+		{
+			var result = JObject.Parse(tableResultJson);
+
+			var recordsArray = result.First.First.SelectToken("records").ToList();
+			var columnsArray = result.First.First.SelectToken("columns").ToList();
+
+			List<T> list = new List<T>();
+			foreach (var columnValuesArray in recordsArray)
+			{
+				JObject jObject = new JObject();
+
+				for (int i = 0; i < columnsArray.Count; i++)
+				{
+					string columnName = columnsArray[i].Value<string>();
+					JProperty jProperty = new JProperty(columnName, columnValuesArray[i]);
+					jObject.Add(jProperty);
+				}
+
+				var reorganizedJson = jObject.ToString();
+
+				T deserializedObject = JsonConvert.DeserializeObject<T>(reorganizedJson);
+				list.Add(deserializedObject);
+			}
+
+			return list;
+		}
+
 		string AddCsrfToken(string fullUri)
 		{
-			if (fullUri.Contains("?")) fullUri = fullUri + $"?csrf={_token}";
+			if (!fullUri.Contains("?")) fullUri = fullUri + $"?csrf={_token}";
 			else fullUri = fullUri + $"&csrf={_token}";
 			return fullUri;
 		}
@@ -49,22 +81,30 @@ namespace MemberAdministration
 
 		async Task<string> GetTokenAsync(string apiUrl, string userName, string password)
 		{
-			HttpWebRequest httpWebReqeust = HttpWebRequestWithCookieContainer(apiUrl);
-
-			httpWebReqeust.Method = "POST";
-
-			var postData = $"username={userName}&password={password}";
-
-			var data = Encoding.UTF8.GetBytes(postData);
-
-			httpWebReqeust.ContentType = "application/x-www-form-urlencoded";
-
-			using (var stream = await Task.Factory.FromAsync<Stream>(httpWebReqeust.BeginGetRequestStream, httpWebReqeust.EndGetRequestStream, null))
+			try
 			{
-				stream.Write(data, 0, data.Length);
-			}
+				HttpWebRequest httpWebReqeust = HttpWebRequestWithCookieContainer(apiUrl);
 
-			return await GetStringAsync(httpWebReqeust);
+				httpWebReqeust.Method = "POST";
+
+				var postData = $"username={userName}&password={password}";
+
+				var data = Encoding.UTF8.GetBytes(postData);
+
+				httpWebReqeust.ContentType = "application/x-www-form-urlencoded";
+
+				using (var stream = await Task.Factory.FromAsync<Stream>(httpWebReqeust.BeginGetRequestStream, httpWebReqeust.EndGetRequestStream, null))
+				{
+					stream.Write(data, 0, data.Length);
+				}
+
+				return await GetStringAsync(httpWebReqeust);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.ToString());
+				throw;
+			}
 		}
 
 		HttpWebRequest HttpWebRequestWithCookieContainer(string url)
@@ -76,13 +116,21 @@ namespace MemberAdministration
 
 		async Task<string> GetStringAsync(HttpWebRequest httpWebRequest)
 		{
-			WebResponse response = await httpWebRequest.GetResponseAsync();
-			Stream responseStream = response.GetResponseStream();
+			try
+			{
+				WebResponse response = await httpWebRequest.GetResponseAsync();
+				Stream responseStream = response.GetResponseStream();
 
-			byte[] responseBytes = ReadFully(responseStream);
-			string responseString = Encoding.UTF8.GetString(responseBytes, 0, responseBytes.Length);
+				byte[] responseBytes = ReadFully(responseStream);
+				string responseString = Encoding.UTF8.GetString(responseBytes, 0, responseBytes.Length);
 
-			return responseString;
+				return responseString;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.ToString());
+				throw;
+			}
 		}
 
 		byte[] ReadFully(Stream stream)

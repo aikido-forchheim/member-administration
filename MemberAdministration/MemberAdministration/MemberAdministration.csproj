@@ -34,6 +34,9 @@
     <EmbeddedResource Include="Views\StartPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserAdministrationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -60,6 +63,14 @@
     <Compile Include="ViewModels\StartPageViewModel.cs" />
     <Compile Include="Models\RestApiAccount.cs" />
     <Compile Include="Interfaces\IPhpCrudApiService.cs" />
+    <Compile Include="Views\UserAdministrationPage.xaml.cs">
+      <DependentUpon>UserAdministrationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\UserAdministrationPageViewModel.cs" />
+    <Compile Include="Proxies\UsersProxy.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Interfaces\IUsersProxy.cs" />
+    <Compile Include="Services\PasswordService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">
@@ -127,6 +138,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

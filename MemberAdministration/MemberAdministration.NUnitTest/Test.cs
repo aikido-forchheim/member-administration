@@ -4,6 +4,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Org.BouncyCastle.Security;
+using PCLCrypto;
 
 namespace MemberAdministration.NUnitTest
 {
@@ -11,6 +13,43 @@ namespace MemberAdministration.NUnitTest
 	public class Test
 	{
 		[Test()]
+		public void TestCase2()
+		{
+			//all these value should be entered by the installer, so nobody knows what hashing parameters are used.
+			//but if we need to change one of those values, all passwords need to be reentered
+			//or we store them along the password like the salt or the iterations ???
+			int saltByteSize = 512;
+			int iterations = 1000;
+			int keyLengthInBytes = 1024;
+			string hashAlgorithm = "SHA512";
+			char delimiter = ':';
+
+			string pepper = "addMeToPassword";
+
+			DateTime start = DateTime.Now;
+
+			Random random = SecureRandom.GetInstance($"{hashAlgorithm}PRNG", true);
+
+			var salt = new byte[saltByteSize];
+			random.NextBytes(salt);
+
+			string saltString = Convert.ToBase64String(salt);
+
+			Console.WriteLine();
+
+			string password = "hallo";
+				
+			byte[] deriveBytes = NetFxCrypto.DeriveBytes.GetBytes(password+pepper, salt, iterations, keyLengthInBytes);
+
+			string stringToStore = $"{saltByteSize}{delimiter}{iterations}{delimiter}{keyLengthInBytes}{delimiter}{hashAlgorithm}{delimiter}{deriveBytes}{delimiter}{saltString}";
+
+			TimeSpan duration = DateTime.Now - start;
+
+			Console.WriteLine(duration.TotalMilliseconds.ToString());
+
+			Console.WriteLine(stringToStore);
+		}
+
 		public void TestCase()
 		{
 			var tableResult = @"{ ""Settings"": {

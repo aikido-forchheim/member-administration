@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Navigation;
 
 namespace MemberAdministration
 {
 	public class StartPageViewModel : BindableBase
 	{
 		readonly ISettingsProxy _settingsProxy;
+		readonly IAccountService _accountService;
+		readonly INavigationService _navigationService;
 
 		public string Title
 		{
@@ -27,12 +32,41 @@ namespace MemberAdministration
 			}
 		}
 
+		string _restApiAccountPassword;
+		public string RestApiAccountPassword
+		{
+			get
+			{
+				return _restApiAccountPassword;
+			}
+			set
+			{
+				_restApiAccountPassword = value;
+				(UserAdministrationCommand as DelegateCommand<object>)?.RaiseCanExecuteChanged();
+			}
+		}
 
-		public StartPageViewModel(ISettingsProxy settingsProxy)
+		public ICommand UserAdministrationCommand { get; private set; }
+
+		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService)
 		{
 			_settingsProxy = settingsProxy;
+			_accountService = accountService;
+			_navigationService = navigationService;
+
+			UserAdministrationCommand = new DelegateCommand<object>(this.OnUserAdministration, this.CanStartUserAdministration);
 
 			InitLogoAsync();
+		}
+
+		bool CanStartUserAdministration(object arg)
+		{
+			return _accountService.RestApiAccount.Password == RestApiAccountPassword;
+		}
+
+		void OnUserAdministration(object obj)
+		{
+			_navigationService.NavigateAsync(nameof(UserAdministrationPage));
 		}
 
 		async Task InitLogoAsync()

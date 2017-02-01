@@ -9,8 +9,8 @@ namespace MemberAdministration
 {
 	public class SettingsProxy : ISettingsProxy
 	{
-		private readonly ILogger _logger;
-		private readonly IPhpCrudApiService _phpCrudApiService;
+		readonly ILogger _logger;
+		readonly IPhpCrudApiService _phpCrudApiService;
 
 		List<Setting> _settings = null;
 
@@ -36,6 +36,8 @@ namespace MemberAdministration
 			string uri = $"Settings";
 			var tableResult = await _phpCrudApiService.GetDataAsync(uri);
 			_settings = _phpCrudApiService.GetList<Setting>(tableResult);
+
+			_logger.LogInformation(_settings.Count + " Settings loaded");
 
 			return _settings;
 		}

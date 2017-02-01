@@ -31,13 +31,14 @@ namespace MemberAdministration
 
 			Container.RegisterTypeForNavigation<MainPage>();
 			Container.RegisterTypeForNavigation<StartPage>();
+			Container.RegisterTypeForNavigation<RestApiSettingsPage>();
+			Container.RegisterTypeForNavigation<UserAdministrationPage>();
 
 			Container.RegisterType<IAccountService, AccountService>(new ContainerControlledLifetimeManager());
 			Container.RegisterType<IPhpCrudApiService, PhpCrudApiService>(new ContainerControlledLifetimeManager());
 			Container.RegisterType<ISettingsProxy, SettingsProxy>(new ContainerControlledLifetimeManager());
 
-
-            Container.RegisterTypeForNavigation<RestApiSettingsPage>();
+			Container.RegisterType<IUsersProxy, UsersProxy>();
         }
 
 		//protected override void OnStart()

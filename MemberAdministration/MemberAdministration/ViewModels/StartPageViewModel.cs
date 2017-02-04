@@ -7,7 +7,7 @@ using Prism.Navigation;
 
 namespace MemberAdministration
 {
-	public class StartPageViewModel : BindableBase
+	public class StartPageViewModel : BindableBase, INavigationAware
 	{
 		readonly ISettingsProxy _settingsProxy;
 		readonly IAccountService _accountService;
@@ -55,8 +55,6 @@ namespace MemberAdministration
 			_navigationService = navigationService;
 
 			UserAdministrationCommand = new DelegateCommand<object>(this.OnUserAdministration, this.CanStartUserAdministration);
-
-			InitLogoAsync();
 		}
 
 		bool CanStartUserAdministration(object arg)
@@ -74,6 +72,16 @@ namespace MemberAdministration
 			var logoSetting = await _settingsProxy.GetSettingAsync("Logo");
 
 			ImageSource = logoSetting.Value;
+		}
+
+		public void OnNavigatedFrom(NavigationParameters parameters)
+		{
+			//throw new NotImplementedException();
+		}
+
+		public async void OnNavigatedTo(NavigationParameters parameters)
+		{
+			await InitLogoAsync();
 		}
 	}
 }

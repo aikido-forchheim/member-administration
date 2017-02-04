@@ -1,15 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Microsoft.Extensions.Logging;
 using Xamarin.Forms;
 
 namespace MemberAdministration
 {
 	public partial class UserAdministrationPage : ContentPage
 	{
-		public UserAdministrationPage()
+		readonly ILogger _logger;
+
+		public UserAdministrationPage(ILogger logger)
 		{
-			InitializeComponent();
+			_logger = logger;
+
+			try
+			{
+				InitializeComponent();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.ToString());
+			}
 		}
 	}
 }

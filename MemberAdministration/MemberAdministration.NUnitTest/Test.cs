@@ -19,7 +19,7 @@ namespace MemberAdministration.NUnitTest
 			//but if we need to change one of those values, all passwords need to be reentered
 			//or we store them along the password like the salt or the iterations ???
 			int saltByteSize = 512;
-			int iterations = 1000;
+			int iterations = 4096;
 			int keyLengthInBytes = 1024;
 			string hashAlgorithm = "SHA512";
 			char delimiter = ':';
@@ -28,20 +28,23 @@ namespace MemberAdministration.NUnitTest
 
 			DateTime start = DateTime.Now;
 
-			Random random = SecureRandom.GetInstance($"{hashAlgorithm}PRNG", true);
+			var secureRandom = SecureRandom.GetInstance($"{hashAlgorithm}PRNG", true);
 
-			var salt = new byte[saltByteSize];
-			random.NextBytes(salt);
+			var saltBytes = new byte[saltByteSize];
+			secureRandom.NextBytes(saltBytes);
 
-			string saltString = Convert.ToBase64String(salt);
+			string salt = Convert.ToBase64String(saltBytes);
 
 			Console.WriteLine();
 
 			string password = "hallo";
 				
-			byte[] deriveBytes = NetFxCrypto.DeriveBytes.GetBytes(password+pepper, salt, iterations, keyLengthInBytes);
+			//uses Pbkdf2
+			byte[] deriveBytes = NetFxCrypto.DeriveBytes.GetBytes(password+pepper, saltBytes, iterations, keyLengthInBytes);
 
-			string stringToStore = $"{saltByteSize}{delimiter}{iterations}{delimiter}{keyLengthInBytes}{delimiter}{hashAlgorithm}{delimiter}{deriveBytes}{delimiter}{saltString}";
+			string hash = Convert.ToBase64String(deriveBytes);
+
+			string stringToStore = $"{hash}{delimiter}{salt}";
 
 			TimeSpan duration = DateTime.Now - start;
 

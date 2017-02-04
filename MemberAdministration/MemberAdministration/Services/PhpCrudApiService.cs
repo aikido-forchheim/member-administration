@@ -26,17 +26,55 @@ namespace MemberAdministration
 			_accountService = accountService;
 		}
 
+		public async Task<string> SendDataAsync<T>(string url, T dataObject)
+		{
+			string jsonData = JsonConvert.SerializeObject(dataObject);
+			return await SendDataAsync(url, jsonData);
+		}
+
+		async Task<string> SendDataAsync(string uri, string jsonData)
+		{
+			string fullUri = await GetFullUriWithCsrfToken(uri);
+
+			HttpWebRequest request = HttpWebRequestWithCookieContainer(fullUri);
+
+			request.ContentType = "application/json";
+			request.Method = "POST";
+
+			var stream = await request.GetRequestStreamAsync();
+			using (var writer = new StreamWriter(stream))
+			{
+				writer.Write(jsonData);
+				writer.Flush();
+				writer.Dispose();
+			}
+
+			var response = await request.GetResponseAsync();
+			var respStream = response.GetResponseStream();
+
+			using (StreamReader sr = new StreamReader(respStream))
+			{
+				return sr.ReadToEnd();
+			}
+		}
+
 		public async Task<string> GetDataAsync(string uri)
 		{
-			if (_token == null) _token = await GetTokenAsync();
-
-			string fullUri = _accountService.RestApiAccount.ApiUrl + uri;
-			fullUri = AddCsrfToken(fullUri);
+			string fullUri = await GetFullUriWithCsrfToken(uri);
 
 			HttpWebRequest httpWebRequest = HttpWebRequestWithCookieContainer(fullUri);
 			httpWebRequest.Method = "GET";
 
 			return await GetStringAsync(httpWebRequest);
+		}
+
+		async Task<string> GetFullUriWithCsrfToken(string uri)
+		{
+			if (_token == null) _token = await GetTokenAsync();
+
+			string fullUri = _accountService.RestApiAccount.ApiUrl + uri;
+			fullUri = AddCsrfToken(fullUri);
+			return fullUri;
 		}
 
 		public List<T> GetList<T>(string tableResultJson)

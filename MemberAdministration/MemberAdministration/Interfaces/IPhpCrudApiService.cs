@@ -9,5 +9,7 @@ namespace MemberAdministration
 		Task<string> GetDataAsync(string uri);
 
 		List<T> GetList<T>(string tableResultJson);
+
+		Task<string> SendDataAsync<T>(string url, T dataObject);
 	}
 }

@@ -1,21 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms" prism:ViewModelLocator.AutowireViewModel="True" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MemberAdministration.StartPage">
 	<ContentPage.Content>
-		<StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-			<Label Text="{Binding Title}">
+		<StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="Center">
+			<Label Text="{Binding Title}" HorizontalOptions="Center" Margin="64" FontSize="24" FontAttributes="Bold">
 			</Label>
-			<Image WidthRequest="256">
-				<Image.MinimumHeightRequest>256</Image.MinimumHeightRequest>
+			<Image WidthRequest="192">
+				<Image.MinimumHeightRequest>192</Image.MinimumHeightRequest>
 				<Image.Source>
 					<UriImageSource CachingEnabled="true" Uri="{Binding ImageSource}">
 						<UriImageSource.CacheValidity>5</UriImageSource.CacheValidity>
 					</UriImageSource>
 				</Image.Source>
 			</Image>
+			<Grid HorizontalOptions="Center" VerticalOptions="CenterAndExpand" WidthRequest="256">
+				<Grid.RowDefinitions>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3*">
+					</ColumnDefinition>
+					<ColumnDefinition Width="4*">
+					</ColumnDefinition>
+				</Grid.ColumnDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" Text="Benutzername:" VerticalOptions="Center"></Label>
+
+				<Entry Text="{Binding UserName}" Grid.Row="0" Grid.Column="1" VerticalOptions="Center"></Entry>
+
+				<Label Grid.Row="1" Grid.Column="0" Text="Passwort:" VerticalOptions="Center"></Label>
+
+				<Entry Text="{Binding Password}" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" IsPassword="true"></Entry>
+
+				<Button Grid.Row="2" Grid.ColumnSpan="2" Text="Anmelden" FontAttributes="Bold"></Button>
+
+				
+			</Grid>
+
+			<StackLayout VerticalOptions="End">
+			
 			<Entry Text="{Binding RestApiAccountPassword}" IsPassword="true" Completed="Handle_Completed">
 			</Entry>
-			<Button Text="Benutzerverwaltung" Command="{Binding UserAdministrationCommand}">
+			<Button Text="Benutzerverwaltung" Command="{Binding UserAdministrationCommand}" Margin="0,0,0,32">
 			</Button>
+				</StackLayout>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

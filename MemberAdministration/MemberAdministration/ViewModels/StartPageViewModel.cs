@@ -46,6 +46,33 @@ namespace MemberAdministration
 			}
 		}
 
+		string _userName;
+		public string UserName
+		{
+			get
+			{
+				return _userName;
+			}
+			set
+			{
+				SetProperty(ref _userName, value);
+			}
+		}
+
+		string _password;
+		public string Password
+		{
+			get
+			{
+				return _password;
+			}
+			set
+			{
+				SetProperty(ref _password, value);
+			}
+		}
+
+
 		public ICommand UserAdministrationCommand { get; private set; }
 
 		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService)

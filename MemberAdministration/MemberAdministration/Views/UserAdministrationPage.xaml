@@ -2,8 +2,28 @@
 <ContentPage xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms" prism:ViewModelLocator.AutowireViewModel="True" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MemberAdministration.UserAdministrationPage">
 	<ContentPage.Content>
 		<StackLayout>
-			<Entry Text="{Binding NewUserName}" x:Name="entryNewUserName"></Entry>
-			<Button Text="Neuen Benutzer hinzufügen" Clicked="Handle_Clicked"></Button>
+			<ListView ItemsSource="{Binding Users}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<ContentView>
+								<StackLayout Orientation="Horizontal">
+									<Label Text="{Binding UserID}">
+									</Label>
+									<Label Text="{Binding Username}">
+									</Label>
+									<Switch IsToggled="{Binding Active}" IsEnabled="false">
+									</Switch>
+								</StackLayout>
+							</ContentView>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+			<Entry Text="{Binding NewUserName}" x:Name="entryNewUserName">
+			</Entry>
+			<Button Text="Neuen Benutzer hinzufügen" Clicked="Handle_Clicked">
+			</Button>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

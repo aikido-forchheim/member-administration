@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,8 +14,8 @@ namespace MemberAdministration
 	{
 		readonly IUsersProxy _usersProxy;
 
-		List<User> _users;
-		public List<User> Users
+		ObservableCollection<User> _users;
+		public ObservableCollection<User> Users
 		{
 			get
 			{
@@ -70,7 +71,7 @@ namespace MemberAdministration
 		{
 			await _usersProxy.AddNewUserAsync(_newUserName);
 
-			Users = await _usersProxy.GetUsersAsync();
+			Users = new ObservableCollection<User>(await _usersProxy.GetUsersAsync());
 			(AddNewUserCommand as DelegateCommand<object>).RaiseCanExecuteChanged();
 		}
 
@@ -81,7 +82,7 @@ namespace MemberAdministration
 
 		public async void OnNavigatedTo(NavigationParameters parameters)
 		{
-			Users = await _usersProxy.GetUsersAsync();
+			Users = new ObservableCollection<User>(await _usersProxy.GetUsersAsync());
 		}
 	}
 }

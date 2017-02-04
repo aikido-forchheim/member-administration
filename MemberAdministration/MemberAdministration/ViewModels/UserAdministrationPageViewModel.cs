@@ -55,6 +55,8 @@ namespace MemberAdministration
 		{
 			if (_users == null) return true;
 
+			if (string.IsNullOrWhiteSpace(_newUserName)) return false;
+
 			var username = (from u in _users where u.Username.ToLower() == _newUserName.ToLower() select u.Username).SingleOrDefault();
 
 			bool userAlreadyExists = false;

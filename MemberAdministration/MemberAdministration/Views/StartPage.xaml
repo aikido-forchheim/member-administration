@@ -4,10 +4,18 @@
 		<StackLayout VerticalOptions="Center" HorizontalOptions="Center">
 			<Label Text="{Binding Title}">
 			</Label>
-			<Image Source="{Binding ImageSource}" WidthRequest="256">
+			<Image WidthRequest="256">
+				<Image.MinimumHeightRequest>256</Image.MinimumHeightRequest>
+				<Image.Source>
+					<UriImageSource CachingEnabled="true" Uri="{Binding ImageSource}">
+						<UriImageSource.CacheValidity>5</UriImageSource.CacheValidity>
+					</UriImageSource>
+				</Image.Source>
 			</Image>
-			<Entry Text="{Binding RestApiAccountPassword}" IsPassword="true" Completed="Handle_Completed"></Entry>
-			<Button Text="Benutzerverwaltung" Command="{Binding UserAdministrationCommand}"></Button>
+			<Entry Text="{Binding RestApiAccountPassword}" IsPassword="true" Completed="Handle_Completed">
+			</Entry>
+			<Button Text="Benutzerverwaltung" Command="{Binding UserAdministrationCommand}">
+			</Button>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

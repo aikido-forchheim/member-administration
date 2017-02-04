@@ -4,9 +4,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace MemberAdministration
 {
+	class SettingsWrapper
+	{
+		public List<Setting> Settings
+		{
+			get;
+			set;
+		}
+	}
+
 	public class SettingsProxy : ISettingsProxy
 	{
 		readonly ILogger _logger;
@@ -34,8 +44,17 @@ namespace MemberAdministration
 			if (_settings != null) return _settings;
 
 			string uri = $"Settings";
-			var tableResult = await _phpCrudApiService.GetDataAsync(uri);
-			_settings = _phpCrudApiService.GetList<Setting>(tableResult);
+
+			var tableResult = await _phpCrudApiService.GetDataAsync(uri, true);
+			//_settings = _phpCrudApiService.GetList<Setting>(tableResult);
+
+			//_settings = JsonConvert.DeserializeObject<List<Setting>>(tableResult);
+
+
+
+			var wrapper =  JsonConvert.DeserializeObject<SettingsWrapper>(tableResult);
+
+			_settings = wrapper.Settings;
 
 			_logger.LogInformation(_settings.Count + " Settings loaded");
 

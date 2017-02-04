@@ -72,7 +72,7 @@ namespace MemberAdministration
 			}
 		}
 
-
+		public ICommand LoginCommand { get; private set; }
 		public ICommand UserAdministrationCommand { get; private set; }
 
 		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService)
@@ -82,6 +82,17 @@ namespace MemberAdministration
 			_navigationService = navigationService;
 
 			UserAdministrationCommand = new DelegateCommand<object>(this.OnUserAdministration, this.CanStartUserAdministration);
+			LoginCommand = new DelegateCommand<object>(this.OnLogin, this.CanStartLogin);
+		}
+
+		bool CanStartLogin(object arg)
+		{
+			return !string.IsNullOrWhiteSpace(_userName);
+		}
+
+		void OnLogin(object obj)
+		{
+			throw new NotImplementedException();
 		}
 
 		bool CanStartUserAdministration(object arg)

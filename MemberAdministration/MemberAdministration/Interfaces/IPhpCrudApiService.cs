@@ -6,7 +6,7 @@ namespace MemberAdministration
 {
 	public interface IPhpCrudApiService
 	{
-		Task<string> GetDataAsync(string uri);
+		Task<string> GetDataAsync(string uri, bool serverTransform = false);
 
 		List<T> GetList<T>(string tableResultJson);
 

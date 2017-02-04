@@ -58,9 +58,11 @@ namespace MemberAdministration
 			}
 		}
 
-		public async Task<string> GetDataAsync(string uri)
+		public async Task<string> GetDataAsync(string uri, bool serverTransform = false)
 		{
 			string fullUri = await GetFullUriWithCsrfToken(uri);
+
+			if (serverTransform) fullUri = AddParam(fullUri, "transform", "1");
 
 			HttpWebRequest httpWebRequest = HttpWebRequestWithCookieContainer(fullUri);
 			httpWebRequest.Method = "GET";
@@ -107,9 +109,17 @@ namespace MemberAdministration
 
 		string AddCsrfToken(string fullUri)
 		{
-			if (!fullUri.Contains("?")) fullUri = fullUri + $"?csrf={_token}";
-			else fullUri = fullUri + $"&csrf={_token}";
+			string paramName = "csrf";
+			string paramValue = _token;
+			fullUri = AddParam(fullUri, paramName, paramValue);
 			return fullUri;
+		}
+
+		static string AddParam(string uri, string paramName, string paramValue)
+		{
+			if (!uri.Contains("?")) uri = uri + $"?{paramName}={paramValue}";
+			else uri = uri + $"&{paramName}={paramValue}";
+			return uri;
 		}
 
 		async Task<string> GetTokenAsync()

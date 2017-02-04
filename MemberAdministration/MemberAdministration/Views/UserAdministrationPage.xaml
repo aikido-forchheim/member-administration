@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms" prism:ViewModelLocator.AutowireViewModel="True" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MemberAdministration.UserAdministrationPage">
 	<ContentPage.Content>
-		<StackLayout>
+		<StackLayout Margin="16">
 			<ListView ItemsSource="{Binding Users}">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<ViewCell>
 							<ContentView>
-								<StackLayout Orientation="Horizontal">
-									<Label Text="{Binding UserID}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="1*">
+										</ColumnDefinition>
+										<ColumnDefinition Width="4*">
+										</ColumnDefinition>
+										<ColumnDefinition Width="2*">
+										</ColumnDefinition>
+									</Grid.ColumnDefinitions>
+									<Label Grid.Column="0" Text="{Binding UserID}" VerticalOptions="Center">
 									</Label>
-									<Label Text="{Binding Username}">
+									<Label Grid.Column="1" Text="{Binding Username}" VerticalOptions="Center">
 									</Label>
-									<Switch IsToggled="{Binding Active}" IsEnabled="false">
+									<Switch Grid.Column="2" IsToggled="{Binding Active}" IsEnabled="false" VerticalOptions="Center">
 									</Switch>
-								</StackLayout>
+								</Grid>
 							</ContentView>
 						</ViewCell>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
+
+			<Label Text="Benutzername für neuen Benutzer:"></Label>
 			<Entry Text="{Binding NewUserName}" x:Name="entryNewUserName">
 			</Entry>
 			<Button Text="Neuen Benutzer hinzufügen" Clicked="Handle_Clicked">

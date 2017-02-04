@@ -6,7 +6,7 @@
 			</Label>
 			<Image Source="{Binding ImageSource}" WidthRequest="256">
 			</Image>
-			<Entry Text="{Binding RestApiAccountPassword}"></Entry>
+			<Entry Text="{Binding RestApiAccountPassword}" IsPassword="true" Completed="Handle_Completed"></Entry>
 			<Button Text="Benutzerverwaltung" Command="{Binding UserAdministrationCommand}"></Button>
 		</StackLayout>
 	</ContentPage.Content>

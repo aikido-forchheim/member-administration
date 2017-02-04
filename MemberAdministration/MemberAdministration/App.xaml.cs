@@ -33,6 +33,7 @@ namespace MemberAdministration
 			Container.RegisterTypeForNavigation<StartPage>();
 			Container.RegisterTypeForNavigation<RestApiSettingsPage>();
 			Container.RegisterTypeForNavigation<UserAdministrationPage>();
+			Container.RegisterTypeForNavigation<EnterPasswordPage>();
 
 			Container.RegisterType<IAccountService, AccountService>(new ContainerControlledLifetimeManager());
 			Container.RegisterType<IPhpCrudApiService, PhpCrudApiService>(new ContainerControlledLifetimeManager());

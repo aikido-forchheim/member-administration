@@ -37,6 +37,9 @@
     <EmbeddedResource Include="Views\UserAdministrationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\EnterPasswordPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -71,6 +74,10 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Interfaces\IUsersProxy.cs" />
     <Compile Include="Services\PasswordService.cs" />
+    <Compile Include="Views\EnterPasswordPage.xaml.cs">
+      <DependentUpon>EnterPasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\EnterPasswordPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

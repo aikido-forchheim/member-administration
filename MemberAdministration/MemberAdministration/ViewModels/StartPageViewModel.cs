@@ -117,12 +117,18 @@ namespace MemberAdministration
 				return;
 			}
 
+			if (serverUser.Password == null)
+			{
+				await _navigationService.NavigateAsync(nameof(EnterPasswordPage));
+			}
+
 			LoginFailed = !IsValid(_password, serverUser.Password);
 		}
 
 		bool IsValid(string plainTextPassword, string encryptedPassword)
 		{
-			
+			//TODO: check
+			return false;
 		}
 
 		bool CanStartUserAdministration(object arg)

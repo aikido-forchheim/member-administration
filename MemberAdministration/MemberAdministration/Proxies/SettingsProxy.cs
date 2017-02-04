@@ -45,16 +45,7 @@ namespace MemberAdministration
 
 			string uri = $"Settings";
 
-			var tableResult = await _phpCrudApiService.GetDataAsync(uri, true);
-			//_settings = _phpCrudApiService.GetList<Setting>(tableResult);
-
-			//_settings = JsonConvert.DeserializeObject<List<Setting>>(tableResult);
-
-
-
-			var wrapper =  JsonConvert.DeserializeObject<SettingsWrapper>(tableResult);
-
-			_settings = wrapper.Settings;
+			_settings = (await _phpCrudApiService.GetDataAsync<SettingsWrapper>(uri)).Settings;
 
 			_logger.LogInformation(_settings.Count + " Settings loaded");
 

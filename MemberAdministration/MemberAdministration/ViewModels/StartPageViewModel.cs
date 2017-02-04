@@ -12,6 +12,7 @@ namespace MemberAdministration
 		readonly ISettingsProxy _settingsProxy;
 		readonly IAccountService _accountService;
 		readonly INavigationService _navigationService;
+		readonly IUsersProxy _usersProxy;
 
 		public string Title
 		{
@@ -56,6 +57,8 @@ namespace MemberAdministration
 			set
 			{
 				SetProperty(ref _userName, value);
+
+				(LoginCommand as DelegateCommand<object>).RaiseCanExecuteChanged();
 			}
 		}
 
@@ -72,14 +75,28 @@ namespace MemberAdministration
 			}
 		}
 
+		bool _loginFailed;
+		public bool LoginFailed
+		{
+			get
+			{
+				return _loginFailed;
+			}
+			set
+			{
+				SetProperty(ref _loginFailed, value);
+			}
+		}
+
 		public ICommand LoginCommand { get; private set; }
 		public ICommand UserAdministrationCommand { get; private set; }
 
-		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService)
+		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService, IUsersProxy usersProxy)
 		{
 			_settingsProxy = settingsProxy;
 			_accountService = accountService;
 			_navigationService = navigationService;
+			_usersProxy = usersProxy;
 
 			UserAdministrationCommand = new DelegateCommand<object>(this.OnUserAdministration, this.CanStartUserAdministration);
 			LoginCommand = new DelegateCommand<object>(this.OnLogin, this.CanStartLogin);
@@ -90,9 +107,22 @@ namespace MemberAdministration
 			return !string.IsNullOrWhiteSpace(_userName);
 		}
 
-		void OnLogin(object obj)
+		async void OnLogin(object obj)
 		{
-			throw new NotImplementedException();
+			var serverUser = await _usersProxy.GetUserAsync(_userName);
+
+			if (serverUser == null)
+			{
+				LoginFailed = true;
+				return;
+			}
+
+			LoginFailed = !IsValid(_password, serverUser.Password);
+		}
+
+		bool IsValid(string plainTextPassword, string encryptedPassword)
+		{
+			
 		}
 
 		bool CanStartUserAdministration(object arg)

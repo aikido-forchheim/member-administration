@@ -6,6 +6,15 @@ using Microsoft.Extensions.Logging;
 
 namespace MemberAdministration
 {
+	class UsersWrapper
+	{
+		public List<User> Users
+		{
+			get;
+			set;
+		}
+	}
+
 	public class UsersProxy : IUsersProxy
 	{
 		readonly ILogger _logger;
@@ -13,7 +22,7 @@ namespace MemberAdministration
 
 		List<User> _users;
 
-		string uri = $"Users";
+		string _uri = $"Users";
 
 		public UsersProxy(ILogger logger, IPhpCrudApiService phpCrudApiService)
 		{
@@ -40,15 +49,25 @@ namespace MemberAdministration
 			newUser.Active = true;
 			newUser.Username = newUserName;
 
-			await _phpCrudApiService.SendDataAsync(uri, newUser);
+			await _phpCrudApiService.SendDataAsync(_uri, newUser);
 
 			await GetUsersAsync();
 		}
 
+		public async Task<User> GetUserAsync(string username)
+		{
+			string uri = $"{_uri}?filter=Username,eq,{username}";
+
+			_users = (await _phpCrudApiService.GetDataAsync<UsersWrapper>(uri)).Users;
+
+			var user = _users.SingleOrDefault();
+
+			return user;
+		}
+
 		public async Task<List<User>> GetUsersAsync()
 		{
-			var tableResult = await _phpCrudApiService.GetDataAsync(uri);
-			_users = _phpCrudApiService.GetList<User>(tableResult);
+			_users = (await _phpCrudApiService.GetDataAsync<UsersWrapper>(_uri)).Users;
 
 			_logger.LogInformation(_users.Count + " Users loaded");
 

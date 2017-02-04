@@ -8,6 +8,8 @@ namespace MemberAdministration
 	{
 		Task<List<User>> GetUsersAsync();
 
+		Task<User> GetUserAsync(string username);
+
 		Task AddNewUserAsync(string newUserName);
 	}
 }

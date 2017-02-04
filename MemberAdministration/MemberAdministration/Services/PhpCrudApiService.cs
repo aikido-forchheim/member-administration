@@ -58,6 +58,14 @@ namespace MemberAdministration
 			}
 		}
 
+		public async Task<T> GetDataAsync<T>(string uri)
+		{
+			var tableResult = await GetDataAsync(uri, true);
+			var wrapper = JsonConvert.DeserializeObject<T>(tableResult);
+
+			return wrapper;
+		}
+
 		public async Task<string> GetDataAsync(string uri, bool serverTransform = false)
 		{
 			string fullUri = await GetFullUriWithCsrfToken(uri);

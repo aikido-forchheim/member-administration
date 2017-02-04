@@ -8,6 +8,8 @@ namespace MemberAdministration
 	{
 		Task<string> GetDataAsync(string uri, bool serverTransform = false);
 
+		Task<T> GetDataAsync<T>(string uri);
+
 		List<T> GetList<T>(string tableResultJson);
 
 		Task<string> SendDataAsync<T>(string url, T dataObject);

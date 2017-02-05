@@ -15,12 +15,9 @@ namespace MemberAdministration.NUnitTest
 		[Test()]
 		public void TestCase2()
 		{
-			//all these value should be entered by the installer, so nobody knows what hashing parameters are used.
-			//but if we need to change one of those values, all passwords need to be reentered
-			//or we store them along the password like the salt or the iterations ???
-			int saltByteSize = 512;
-			int iterations = 4096;
-			int keyLengthInBytes = 1024;
+			int saltByteSize = 32;
+			int iterations = 10000;
+			int keyLengthInBytes = 20; //https://www.owasp.org/index.php/Using_Rfc2898DeriveBytes_for_PBKDF2 => With PBKDF2-SHA1 this is 160 bits or 20 bytes
 			string hashAlgorithm = "SHA512";
 			char delimiter = ':';
 

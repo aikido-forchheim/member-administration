@@ -78,6 +78,7 @@
       <DependentUpon>EnterPasswordPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EnterPasswordPageViewModel.cs" />
+    <Compile Include="Services\PasswordHashingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="ViewModels\EnterPasswordPageViewModel.cs" />
     <Compile Include="Services\PasswordHashingService.cs" />
+    <Compile Include="Interfaces\IPasswordHashingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

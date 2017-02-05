@@ -11,5 +11,7 @@ namespace MemberAdministration
 		Task<User> GetUserAsync(string username);
 
 		Task AddNewUserAsync(string newUserName);
+
+		Task UpdateUserAsync(User user);
 	}
 }

@@ -26,20 +26,30 @@ namespace MemberAdministration
 			_accountService = accountService;
 		}
 
+		public async Task<string> UpdateDataAsync<T>(string url, T dataObject)
+		{
+			List<T> array = new List<T>();
+			array.Add(dataObject);
+
+			string jsonData = JsonConvert.SerializeObject(array);
+			string response = await SendDataAsync(url, jsonData, "PUT");
+			return response;
+		}
+
 		public async Task<string> SendDataAsync<T>(string url, T dataObject)
 		{
 			string jsonData = JsonConvert.SerializeObject(dataObject);
 			return await SendDataAsync(url, jsonData);
 		}
 
-		async Task<string> SendDataAsync(string uri, string jsonData)
+		async Task<string> SendDataAsync(string uri, string jsonData, string method = "POST")
 		{
 			string fullUri = await GetFullUriWithCsrfToken(uri);
 
 			HttpWebRequest request = HttpWebRequestWithCookieContainer(fullUri);
 
 			request.ContentType = "application/json";
-			request.Method = "POST";
+			request.Method = method;
 
 			var stream = await request.GetRequestStreamAsync();
 			using (var writer = new StreamWriter(stream))

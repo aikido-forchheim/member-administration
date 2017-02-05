@@ -39,6 +39,7 @@ namespace MemberAdministration
 			Container.RegisterType<IPhpCrudApiService, PhpCrudApiService>(new ContainerControlledLifetimeManager());
 			Container.RegisterType<ISettingsProxy, SettingsProxy>(new ContainerControlledLifetimeManager());
 
+			Container.RegisterType<IPasswordHashingService, PasswordHashingService>();
 			Container.RegisterType<IUsersProxy, UsersProxy>();
         }
 

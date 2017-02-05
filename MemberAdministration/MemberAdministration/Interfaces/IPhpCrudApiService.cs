@@ -13,5 +13,7 @@ namespace MemberAdministration
 		List<T> GetList<T>(string tableResultJson);
 
 		Task<string> SendDataAsync<T>(string url, T dataObject);
+
+		Task<string> UpdateDataAsync<T>(string url, T dataObject);
 	}
 }

@@ -13,6 +13,7 @@ namespace MemberAdministration
 		readonly IAccountService _accountService;
 		readonly INavigationService _navigationService;
 		readonly IUsersProxy _usersProxy;
+		readonly IPasswordHashingService _passwordHashingService;
 
 		public string Title
 		{
@@ -91,12 +92,13 @@ namespace MemberAdministration
 		public ICommand LoginCommand { get; private set; }
 		public ICommand UserAdministrationCommand { get; private set; }
 
-		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService, IUsersProxy usersProxy)
+		public StartPageViewModel(ISettingsProxy settingsProxy, IAccountService accountService, INavigationService navigationService, IUsersProxy usersProxy, IPasswordHashingService passwordHashingService)
 		{
 			_settingsProxy = settingsProxy;
 			_accountService = accountService;
 			_navigationService = navigationService;
 			_usersProxy = usersProxy;
+			_passwordHashingService = passwordHashingService;
 
 			UserAdministrationCommand = new DelegateCommand<object>(this.OnUserAdministration, this.CanStartUserAdministration);
 			LoginCommand = new DelegateCommand<object>(this.OnLogin, this.CanStartLogin);
@@ -119,16 +121,26 @@ namespace MemberAdministration
 
 			if (serverUser.Password == null)
 			{
-				await _navigationService.NavigateAsync(nameof(EnterPasswordPage));
+				NavigationParameters np = new NavigationParameters();
+				np.Add(nameof(User), serverUser);
+
+				await _navigationService.NavigateAsync(nameof(EnterPasswordPage), np);
+				return;
 			}
 
-			LoginFailed = !IsValid(_password, serverUser.Password);
+			if (String.IsNullOrWhiteSpace(_password))
+			{
+				LoginFailed = true;
+				return;
+			}
+
+			LoginFailed = !await IsValid(_password, serverUser.Password);
 		}
 
-		bool IsValid(string plainTextPassword, string encryptedPassword)
+		async Task<bool> IsValid(string plainTextPassword, string encryptedPassword)
 		{
-			//TODO: check
-			return false;
+			bool isValid = await _passwordHashingService.IsValidAsync(plainTextPassword, encryptedPassword);
+			return isValid;
 		}
 
 		bool CanStartUserAdministration(object arg)

@@ -5,7 +5,7 @@ using PCLCrypto;
 
 namespace MemberAdministration
 {
-	public class PasswordHashingService
+	public class PasswordHashingService : IPasswordHashingService
 	{
 		char delimiter = ':';
 		int saltByteSize = 32;

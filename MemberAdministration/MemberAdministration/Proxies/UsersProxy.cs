@@ -30,6 +30,13 @@ namespace MemberAdministration
 			_phpCrudApiService = phpCrudApiService;
 		}
 
+		public async Task UpdateUserAsync(User user)
+		{
+			await _phpCrudApiService.UpdateDataAsync(_uri+"/"+user.UserID.ToString(), user);
+
+			await GetUsersAsync();
+		}
+
 		public async Task AddNewUserAsync(string newUserName)
 		{
 			await GetUsersAsync();

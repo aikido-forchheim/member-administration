@@ -28,12 +28,20 @@ namespace MemberAdministration
 
 		public async Task<string> UpdateDataAsync<T>(string url, T dataObject)
 		{
-			List<T> array = new List<T>();
-			array.Add(dataObject);
+			try
+			{
+				//List<T> array = new List<T>();
+				//array.Add(dataObject);
 
-			string jsonData = JsonConvert.SerializeObject(array);
-			string response = await SendDataAsync(url, jsonData, "PUT");
-			return response;
+				string jsonData = JsonConvert.SerializeObject(dataObject);
+				string response = await SendDataAsync(url, jsonData, "PUT");
+				return response;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.ToString());
+				return null;
+			}
 		}
 
 		public async Task<string> SendDataAsync<T>(string url, T dataObject)

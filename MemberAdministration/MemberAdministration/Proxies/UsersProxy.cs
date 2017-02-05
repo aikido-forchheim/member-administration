@@ -32,6 +32,11 @@ namespace MemberAdministration
 
 		public async Task UpdateUserAsync(User user)
 		{
+			UserBase u = new UserBase();
+			u.Active = user.Active;
+			u.Password = user.Password;
+			u.Username = user.Username;
+
 			await _phpCrudApiService.UpdateDataAsync(_uri+"/"+user.UserID.ToString(), user);
 
 			await GetUsersAsync();
@@ -41,7 +46,7 @@ namespace MemberAdministration
 		{
 			await GetUsersAsync();
 
-			int nextID = 0;
+			int nextID = 1;
 			if (!(_users == null || _users.Count == 0))
 			{
 				var userNames = (from u in _users select u.Username.ToLower()).ToList();

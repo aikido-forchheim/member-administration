@@ -58,14 +58,16 @@ namespace MemberAdministration.NUnitTest
 										}
 									}";
 
-			Setting sampleSetting = new Setting();
-			sampleSetting.Key = "HashAlgorithm";
-			sampleSetting.Value = "SHA512";
-			sampleSetting.Des = "HashAlgorithm used for password hashing";
+            Setting sampleSetting = new Setting()
+            {
+                Key = "HashAlgorithm",
+                Value = "SHA512",
+                Des = "HashAlgorithm used for password hashing"
+            };
 
-			//string sinlgeObject = JsonConvert.SerializeObject(sampleSetting);
+            //string sinlgeObject = JsonConvert.SerializeObject(sampleSetting);
 
-			var result = JObject.Parse(tableResult);
+            var result = JObject.Parse(tableResult);
 
 			var recordsArray = result.First.First.SelectToken("records").ToList();
 			var columnsArray = result.First.First.SelectToken("columns").ToList();

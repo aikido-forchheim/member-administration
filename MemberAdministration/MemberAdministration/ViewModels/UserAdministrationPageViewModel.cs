@@ -84,5 +84,10 @@ namespace MemberAdministration
 		{
 			Users = new ObservableCollection<User>(await _usersProxy.GetUsersAsync());
 		}
-	}
+
+        public void OnNavigatingTo(NavigationParameters parameters)
+        {
+            //throw new NotImplementedException();
+        }
+    }
 }

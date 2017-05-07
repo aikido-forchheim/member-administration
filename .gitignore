@@ -250,3 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+MemberAdministration/\.DS_Store
+
+\.DS_Store

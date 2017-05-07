@@ -82,5 +82,10 @@ namespace MemberAdministration
 				_user = parameters[nameof(User)] as User;
 			}
 		}
-	}
+
+        public void OnNavigatingTo(NavigationParameters parameters)
+        {
+            //throw new NotImplementedException();
+        }
+    }
 }
